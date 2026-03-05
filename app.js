@@ -17,7 +17,6 @@ const THEME_GRADIENTS = {
   "night-rain": ["#060d1f", "#102347"],
   "night-snow": ["#2e3a48", "#4a5d70"]
 };
-const ICON_CACHE = new Map();
 let currentLocation = loadSavedLocation();
 
 const elements = {
@@ -189,85 +188,16 @@ function updateClock() {
   elements.clock.textContent = formatter.format(now);
 }
 
-async function setIconGraphic(element, iconFile) {
-  try {
-    const svgMarkup = await getPreparedIconMarkup(iconFile);
-    element.classList.remove("icon-fallback");
-    element.innerHTML = svgMarkup;
-  } catch (error) {
-    console.error(`Unable to load icon ${iconFile}`, error);
-    element.classList.add("icon-fallback");
-    element.innerHTML = `<img class="svg-fallback-icon" src="${ICON_BASE_PATH}/${iconFile}" alt="">`;
-  }
-}
+function setIconGraphic(element, iconFile) {
+  const img = document.createElement("img");
+  img.className = "svg-fallback-icon";
+  img.src = `${ICON_BASE_PATH}/${iconFile}`;
+  img.alt = "";
+  img.decoding = "async";
+  img.loading = "lazy";
 
-async function getPreparedIconMarkup(iconFile) {
-  if (ICON_CACHE.has(iconFile)) {
-    return ICON_CACHE.get(iconFile);
-  }
-
-  const response = await fetch(`${ICON_BASE_PATH}/${iconFile}`, { cache: "force-cache" });
-  if (!response.ok) {
-    throw new Error(`Icon request failed with status ${response.status}`);
-  }
-
-  const rawSvg = await response.text();
-  const preparedSvg = normalizeSvgForThemeColor(rawSvg);
-  ICON_CACHE.set(iconFile, preparedSvg);
-  return preparedSvg;
-}
-
-function normalizeSvgForThemeColor(rawSvg) {
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(rawSvg, "image/svg+xml");
-  const svg = doc.querySelector("svg");
-  if (!svg) {
-    return "";
-  }
-
-  const parserError = doc.querySelector("parsererror");
-  if (parserError) {
-    return "";
-  }
-
-  svg.removeAttribute("width");
-  svg.removeAttribute("height");
-  svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
-  if (!svg.hasAttribute("viewBox")) {
-    svg.setAttribute("viewBox", "0 0 24 24");
-  }
-
-  // Force visible paths/shapes to inherit CSS color while keeping intentional "none" values.
-  const nodes = svg.querySelectorAll("*");
-  for (const node of nodes) {
-    if (node.hasAttribute("fill")) {
-      const fill = node.getAttribute("fill").trim().toLowerCase();
-      if (fill !== "none") {
-        node.setAttribute("fill", "currentColor");
-      }
-    }
-
-    if (node.hasAttribute("stroke")) {
-      const stroke = node.getAttribute("stroke").trim().toLowerCase();
-      if (stroke !== "none") {
-        node.setAttribute("stroke", "currentColor");
-      }
-    }
-
-    const inlineStyle = node.getAttribute("style");
-    if (inlineStyle) {
-      const rewritten = inlineStyle
-        .replace(/fill\s*:\s*[^;]+/gi, "fill: currentColor")
-        .replace(/stroke\s*:\s*[^;]+/gi, "stroke: currentColor");
-      node.setAttribute("style", rewritten);
-    }
-  }
-
-  if (!svg.hasAttribute("fill")) {
-    svg.setAttribute("fill", "currentColor");
-  }
-
-  return svg.outerHTML;
+  element.classList.add("icon-fallback");
+  element.replaceChildren(img);
 }
 
 function updateDynamicIconColor(dayState, weatherState) {
