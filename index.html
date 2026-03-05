@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Front Door Weather Panel</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="day clear">
+  <div class="ambient-glow" aria-hidden="true"></div>
+
+  <main class="dashboard" id="dashboard">
+    <section class="card current-card" id="current-card" aria-live="polite">
+      <div class="current-header">
+        <p class="eyebrow">Current Weather</p>
+        <button id="location-label" class="location-label location-button" type="button" title="Change location">Loading location...</button>
+        <button id="change-location" class="change-location-button" type="button">Change Location</button>
+      </div>
+      <time id="clock" class="clock card-clock" aria-live="polite">--:--</time>
+
+      <span id="current-icon" class="current-icon weather-mask-icon" role="img" aria-label="Current weather icon"></span>
+
+      <h1 id="current-temp" class="current-temp">--&deg;</h1>
+      <p class="feels-inline">Feels like <strong id="feels-like">--&deg;</strong></p>
+      <p id="current-condition" class="condition">Loading weather data...</p>
+
+      <p id="error-message" class="error-message" hidden>Weather data unavailable</p>
+    </section>
+
+    <aside class="card today-card" aria-label="Today summary">
+      <h2 class="card-title">Today</h2>
+      <div class="summary-grid">
+        <article class="summary-row">
+          <span>High / Low</span>
+          <strong id="high-low">-- / --</strong>
+        </article>
+        <article class="summary-row">
+          <span>Precipitation</span>
+          <strong id="precip">--%</strong>
+        </article>
+        <article class="summary-row">
+          <span>Sunrise</span>
+          <strong id="sunrise">--:--</strong>
+        </article>
+        <article class="summary-row">
+          <span>Sunset</span>
+          <strong id="sunset">--:--</strong>
+        </article>
+        <article class="summary-row">
+          <span>Wind</span>
+          <strong id="wind">--</strong>
+        </article>
+        <article class="summary-row">
+          <span>Humidity</span>
+          <strong id="humidity">--%</strong>
+        </article>
+      </div>
+    </aside>
+
+    <section class="card forecast-card" aria-label="7 day forecast">
+      <h2 class="card-title">7-Day Forecast</h2>
+      <div id="forecast-grid" class="forecast-grid"></div>
+    </section>
+  </main>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
