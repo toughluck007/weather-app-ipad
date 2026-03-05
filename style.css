@@ -5,6 +5,10 @@
   --card-bg: rgba(255, 255, 255, 0.08);
   --card-border: rgba(255, 255, 255, 0.16);
   --shadow: 0 18px 45px rgba(6, 12, 20, 0.24);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
 }
 
 * {
@@ -130,7 +134,7 @@ body.night .ambient-glow {
   grid-template-columns: 2fr 1fr;
   grid-template-rows: minmax(340px, 1fr) auto;
   gap: 24px;
-  padding: 32px;
+  padding: calc(32px + var(--safe-top)) calc(32px + var(--safe-right)) calc(32px + var(--safe-bottom)) calc(32px + var(--safe-left));
   height: 100vh;
 }
 
@@ -402,7 +406,7 @@ body.loaded .card {
     height: auto;
     grid-template-columns: 1fr;
     grid-template-rows: auto auto auto;
-    padding: 20px;
+    padding: calc(20px + var(--safe-top)) calc(20px + var(--safe-right)) calc(20px + var(--safe-bottom)) calc(20px + var(--safe-left));
   }
 
   .current-card,
