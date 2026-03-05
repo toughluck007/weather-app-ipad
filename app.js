@@ -1,5 +1,5 @@
-const DEFAULT_LATITUDE = 43.3715;
-const DEFAULT_LONGITUDE = -80.9835;
+const DEFAULT_LATITUDE = 43.6510;
+const DEFAULT_LONGITUDE = -79.3470;
 const REFRESH_INTERVAL = 600000; // 10 minutes
 const USE_24H_CLOCK = true;
 const LOCATION_STORAGE_KEY = "weather_app_location_v1";
